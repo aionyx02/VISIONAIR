@@ -1,4 +1,3 @@
-# src/hand_tracker.py
 import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
@@ -7,7 +6,7 @@ import numpy as np
 import os
 
 class HandTracker:
-    def __init__(self, model_path='hand_landmarker.task'):
+    def __init__(self, model_path='../hand_landmarker.task'):
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Hand landmark model file not found at {model_path}")
 
@@ -23,13 +22,7 @@ class HandTracker:
         self.results = self.landmarker.detect(mp_image)
         
         if draw and self.results.hand_landmarks:
-            for hand_landmarks in self.results.hand_landmarks:
-                mp.solutions.drawing_utils.draw_landmarks(
-                    img,
-                    hand_landmarks,
-                    mp.solutions.hands.HAND_CONNECTIONS,
-                    mp.solutions.drawing_styles.get_hand_landmarks_style(),
-                    mp.solutions.drawing_styles.get_hand_connections_style())
+            pass
         return img
 
     def get_position(self, img, hand_no=0, draw=True):
@@ -41,5 +34,5 @@ class HandTracker:
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 lm_list.append([id, cx, cy])
                 if draw:
-                    cv2.circle(img, (cx, cy), 7, (255, 0, 255), cv2.FILLED)
+                    pass
         return lm_list
