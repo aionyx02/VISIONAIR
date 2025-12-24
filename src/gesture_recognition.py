@@ -9,23 +9,29 @@ class GestureRecognition(nn.Module):
         """
         super(GestureRecognition, self).__init__()
 
-        self.fc1 = nn.Linear(input_size, 128)
+        # LSTM layer
+        # input_size: The number of expected features in the input x
+        # hidden_size: The number of features in the hidden state h
+        # num_layers: Number of recurrent layers
+        # batch_first: If True, then the input and output tensors are provided as (batch, seq, feature)
+        self.hidden_size = 128
+        self.num_layers = 2
+        self.lstm = nn.LSTM(input_size, self.hidden_size, self.num_layers, batch_first=True)
 
-        self.relu = nn.ReLU()
-
-        self.fc2 = nn.Linear(128, num_classes)
-
+        self.fc = nn.Linear(self.hidden_size, num_classes)
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         """
         定義數據在網路中的傳遞流程 (前向傳播)
-        :param x: 輸入的手部座標數據
+        :param x: 輸入的手部座標數據序列 (batch_size, seq_len, input_size)
         :return: 各個手勢的機率預測值
         """
-        out = self.fc1(x)
-        out = self.relu(out)
-        out = self.fc2(out)
-        out = self.softmax(out)
+        # Forward propagate LSTM
+        # out: tensor of shape (batch_size, seq_length, hidden_size)
+        out, _ = self.lstm(x)
 
+        # Decode the hidden state of the last time step
+        out = self.fc(out[:, -1, :])
+        out = self.softmax(out)
         return out

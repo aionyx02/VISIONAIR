@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         h, w, ch = frame.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QImage(frame.data, w, h, bytes_per_line, QImage.Format.Format_BGR888)
-        p = convert_to_Qt_format.scaled(1024, 960, Qt.AspectRatioMode.KeepAspectRatio)
+        p = convert_to_Qt_format.scaled(1280, 960, Qt.AspectRatioMode.KeepAspectRatio)
         self.video_label.setPixmap(QPixmap.fromImage(p))
 
     def update_gesture(self, gesture):
